@@ -1,96 +1,154 @@
 /* Design crew (Shirley + Tvishaa): this file is yours.
-   Change the colors here and the whole game updates.
-   Inspiration: light, cute kawaii fall with variety of pastels - pumpkin, gold, burgundy, sage, rust. */
+   Colors come from Tvishaa's chamber drawings (art/): brick, wood, moss, maze gold,
+   and the green / purple / teal of her three Hall doors. The final Council picked her drawings.
+   The button lift on hover is Shirley's animation (see "button:hover"). */
 :root {
-  --stone: #faf6f1;     /* very light cream background */
-  --panel: #f5ebe0;     /* soft peachy-beige panels */
-  --text: #5a4a3d;      /* warm dark brown text */
-  --torch: #e8b89d;     /* soft peachy-rose accent */
-  --warlock: #d4a89c;   /* warm dusty rose - cute warlock */
-  
-  /* Fall color palette for variety */
-  --fall-pumpkin: #f5a962;    /* soft pumpkin orange */
-  --fall-golden: #e5c577;     /* warm golden yellow */
-  --fall-burgundy: #c48a8a;   /* dusty burgundy/mauve */
-  --fall-sage: #a8b89a;       /* soft sage green */
-  --fall-rust: #c98a70;       /* warm rust */
+  --stone: #17110a;     /* darkest brick, behind everything */
+  --panel: #21170e;     /* dark wood chamber panel */
+  --ink: #0b0806;       /* the black outlines in Tvishaa's drawings */
+  --text: #f3e6cf;
+  --muted: #bba586;
+  --torch: #ffce33;     /* main accent: the gold coins in the Maze drawing */
+  --wood: #c8923f;      /* door planks */
+  --moss: #74b84f;      /* Maze hedges, lightened to read on dark */
+  --warlock: #86c6c1;   /* the teal door behind the warlock */
+
+  /* Tvishaa's three Hall doors */
+  --door-green: #4f9a2c;
+  --door-purple: #8a55c4;
+  --door-teal: #2f9ca2;
+
+  /* Fonts: Microsoft fonts that come with Windows and Office.
+     Castellar is carved-stone capitals, used for big titles only. */
+  --font-title: "Castellar", "Constantia", Georgia, serif;
+  --font-body: "Constantia", "Palatino Linotype", Georgia, serif;
+  --font-code: "Cascadia Mono", Consolas, "Courier New", monospace;
 }
 
 body {
   margin: 0;
+  min-height: 100vh;
   background: var(--stone);
-  background-image: 
-    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200"><defs><style>.leaf1{fill:%23f5a96255;opacity:0.6}.leaf2{fill:%23e5c57755;opacity:0.5}.leaf3{fill:%23c48a8a55;opacity:0.55}.leaf4{fill:%23a8b89a55;opacity:0.5}</style></defs><g transform="translate(50,50)"><path class="leaf1" d="M0,-20 Q-10,-10 -15,0 Q-10,10 0,20 Q10,10 15,0 Q10,-10 0,-20" transform="rotate(15)"/></g><g transform="translate(150,80)"><path class="leaf2" d="M0,-20 Q-10,-10 -15,0 Q-10,10 0,20 Q10,10 15,0 Q10,-10 0,-20" transform="rotate(45)"/></g><g transform="translate(30,150)"><path class="leaf3" d="M0,-20 Q-10,-10 -15,0 Q-10,10 0,20 Q10,10 15,0 Q10,-10 0,-20" transform="rotate(75)"/></g><g transform="translate(170,30)"><path class="leaf4" d="M0,-20 Q-10,-10 -15,0 Q-10,10 0,20 Q10,10 15,0 Q10,-10 0,-20" transform="rotate(120)"/></g><g transform="translate(100,180)"><path class="leaf1" d="M0,-20 Q-10,-10 -15,0 Q-10,10 0,20 Q10,10 15,0 Q10,-10 0,-20" transform="rotate(30)"/></g></svg>');
-  background-repeat: repeat;
-  background-size: 300px 300px;
-  background-attachment: fixed;
   color: var(--text);
-  font-family: Georgia, "Times New Roman", serif;
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.55;
 }
 
+/* Tvishaa's drawing for the current screen sits behind the panel.
+   game.js sets body data-scene, for example show(html, "maze"). */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(rgba(12, 8, 4, 0.35), rgba(12, 8, 4, 0.35)),
+    var(--scene, none) center / cover no-repeat,
+    var(--stone);
+}
+body[data-scene="door"]    { --scene: url("art/tvishaa-door.jpg"); }
+body[data-scene="warlock"] { --scene: url("art/tvishaa-warlock.jpg"); }
+body[data-scene="maze"]    { --scene: url("art/tvishaa-maze.jpg"); }
+body[data-scene="lab"]     { --scene: url("art/tvishaa-lab.jpg"); }
+body[data-scene="hall"]    { --scene: url("art/tvishaa-hall.jpg"); }
 
 main {
   max-width: 760px;
-  margin: 40px auto;
-  padding: 28px;
+  margin: 40px auto 16px;
+  padding: 28px 32px;
   background: var(--panel);
+  border: 3px solid var(--ink);
   border-radius: 20px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 0 var(--ink);
 }
 
-h1, h2 { line-height: 1.2; }
-h2 { border-left: 4px solid var(--fall-pumpkin); padding-left: 12px; }
-.progress { color: #9a8a7d; font-size: 14px; }
-.concept { color: var(--fall-rust); font-weight: bold; }
-.story { font-style: italic; color: #6a5a4d; }
-.warlock { color: var(--fall-burgundy); font-weight: bold; }
-.spell { color: var(--fall-golden); font-weight: bold; letter-spacing: 2px; }
+h1 {
+  font-family: var(--font-title);
+  font-weight: normal;
+  font-size: 40px;
+  line-height: 1.1;
+  color: var(--torch);
+  margin: 0 0 4px;
+}
+h2 { font-size: 23px; line-height: 1.3; }
+.subtitle { margin: 0 0 20px; color: var(--wood); font-size: 20px; font-style: italic; }
+.progress { color: var(--muted); font-size: 15px; margin: 0; }
+.concept { color: var(--moss); font-weight: bold; margin-top: 2px; }
+.story { font-style: italic; color: #e3d2b4; }
+.warlock { color: var(--warlock); font-weight: bold; }
+.spell { color: var(--torch); font-weight: bold; letter-spacing: 2px; }
 
 pre {
-  background: #ede3d8;
+  background: var(--ink);
   padding: 14px;
+  border: 1px solid #3a2a18;
   border-radius: 12px;
   overflow-x: auto;
   text-align: left;
-  border: 1px solid #e0d5ca;
+  font-size: 15px;
 }
+code { font-family: var(--font-code); color: #f6ead2; }
 
 button {
   padding: 10px 16px;
   margin: 4px 4px 4px 0;
-  border: none;
+  border: 2px solid var(--ink);
   border-radius: 16px;
   background: var(--torch);
-  color: #ffffff;
+  color: var(--ink);
+  font-family: var(--font-body);
   font-weight: bold;
-  font-size: 16px;
+  font-size: 17px;
   cursor: pointer;
+  /* Shirley's animation: buttons lift a little when you point at them */
   transition: transform 0.2s, box-shadow 0.2s;
 }
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(232, 184, 157, 0.3);
+  box-shadow: 0 4px 12px rgba(255, 206, 51, 0.25);
 }
+button:active { transform: translateY(0); }
+button:focus-visible { outline: 3px solid var(--torch); outline-offset: 2px; }
 button.secondary { background: transparent; color: var(--torch); border: 2px solid var(--torch); }
 
 .choices { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-.choice { background: transparent; color: var(--text); border: 2px solid var(--torch); border-radius: 12px; }
-.choice:nth-child(1) { border-color: var(--fall-pumpkin); }
-.choice:nth-child(2) { border-color: var(--fall-golden); }
-.choice:nth-child(3) { border-color: var(--fall-sage); }
-.choice:nth-child(4) { border-color: var(--fall-burgundy); }
-.choice:nth-child(5) { border-color: var(--fall-rust); }
-.choice small { display: block; font-weight: normal; }
+.choice { background: #2b1f13; color: var(--text); border: 2px solid var(--torch); border-radius: 12px; }
+.choice:nth-child(1) { border-color: var(--torch); }
+.choice:nth-child(2) { border-color: var(--moss); }
+.choice:nth-child(3) { border-color: var(--door-teal); }
+.choice:nth-child(4) { border-color: var(--door-purple); }
+.choice:nth-child(5) { border-color: var(--wood); }
+.choice small { display: block; font-weight: normal; color: var(--muted); }
 
+/* Hall of Illusions: each door matches one of Tvishaa's three arched doors */
 .doors { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 12px; }
-.door { background: #f0e5d8; color: var(--text); text-align: left; border-radius: 12px; border: 2px solid #e0d5ca; }
-.door:nth-child(1) { border-color: var(--fall-pumpkin); background: #fff8f3; }
-.door:nth-child(2) { border-color: var(--fall-sage); background: #f7faf4; }
-.door:nth-child(3) { border-color: var(--fall-burgundy); background: #faf5f5; }
-.door pre { font-size: 12px; }
+.door {
+  color: var(--text);
+  text-align: left;
+  border: 3px solid var(--ink);
+  border-radius: 48px 48px 12px 12px;
+  padding: 22px 12px 12px;
+}
+.door b { display: block; text-align: center; }
+.door:nth-child(1) { background: #22401a; border-color: var(--door-green); }
+.door:nth-child(2) { background: #2e1a45; border-color: var(--door-purple); }
+.door:nth-child(3) { background: #133d40; border-color: var(--door-teal); }
+.door pre { font-size: 13px; }
 
-textarea { width: 100%; box-sizing: border-box; padding: 10px; font: inherit; border-radius: 8px; }
+textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  font: inherit;
+  color: var(--text);
+  background: var(--ink);
+  border: 2px solid #3a2a18;
+  border-radius: 8px;
+}
+textarea:focus { outline: 2px solid var(--torch); }
 
+/* Sanjana's maze counter and key flashcards */
 .maze-board {
   width: fit-content;
   padding: 8px 12px;
@@ -98,7 +156,7 @@ textarea { width: 100%; box-sizing: border-box; padding: 10px; font: inherit; bo
   border: 2px solid var(--torch);
   border-radius: 8px;
   color: var(--torch);
-  background: #000;
+  background: var(--ink);
   font-weight: bold;
   letter-spacing: 1px;
 }
@@ -109,7 +167,7 @@ textarea { width: 100%; box-sizing: border-box; padding: 10px; font: inherit; bo
   padding: 18px;
   border: 2px solid var(--torch);
   border-radius: 10px;
-  background: #000;
+  background: var(--ink);
   box-shadow: 0 4px 0 var(--torch);
 }
 
@@ -117,8 +175,28 @@ textarea { width: 100%; box-sizing: border-box; padding: 10px; font: inherit; bo
   margin-top: 0;
   color: var(--torch);
   font-weight: bold;
-  text-transform: uppercase;
   letter-spacing: 1px;
 }
 
-@media (max-width: 700px) { .doors { grid-template-columns: 1fr; } }
+/* Leslie's weak-spot scroll on the escape screen */
+.weak-spot {
+  padding: 12px 16px;
+  background: #ead9b5;
+  color: #2a1d0f;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+}
+
+footer { max-width: 760px; margin: 0 auto 32px; padding: 0 16px; text-align: center; font-size: 14px; color: #e3d2b4; }
+footer span { display: inline-block; background: rgba(11, 8, 6, 0.75); padding: 4px 10px; border-radius: 8px; }
+
+@media (max-width: 700px) {
+  .doors { grid-template-columns: 1fr; }
+  main { margin: 16px; padding: 20px; }
+  h1 { font-size: 30px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button { transition: none; }
+  button:hover { transform: none; }
+}

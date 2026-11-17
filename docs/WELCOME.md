@@ -17,8 +17,8 @@ Knight's Escape is a browser escape room that teaches Java OOP. A warlock traps 
 | `game.js` | How screens work, the victory screen | Build (Leslie, Sanjana) |
 | `index.html` | Page structure (rarely changes) | Build |
 | `README.md` | Full game overview and git workflow | Katrina |
-| `TEAM-GUIDE.md` | Setup, weekly routine, AI tips, demo timeline | Katrina |
-| `WELCOME.md` | This page | Katrina |
+| `docs/TEAM-GUIDE.md` | Setup, weekly routine, AI tips, demo timeline | Katrina |
+| `docs/WELCOME.md` | This page | Katrina |
 
 Most tasks only touch one file. Every chamber has an example you can copy.
 
@@ -65,4 +65,4 @@ Never push directly to `1.0` (that's our main branch). GitHub will block it anyw
 
 Run `git status` to see your branch and what changed. If you hit a merge conflict or pushed to the wrong place, don't force anything. Post in Discord and we'll fix it together.
 
-The full details are in [README.md](README.md).
+The full details are in [README.md](../README.md).

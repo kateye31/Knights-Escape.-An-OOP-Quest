@@ -4,7 +4,6 @@
 
 // ---------- Start screen ----------
 const KNIGHTS = [
-  // TODO (design crew): name your knights and pick their colors
   { name: "Sir Byte", color: "#ffc21a" },
   { name: "Dame Loop", color: "#c2ba52" },
   { name: "Sir Null", color: "#f08a4b" },

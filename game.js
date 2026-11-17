@@ -14,15 +14,13 @@ let player = {
   labMistakes: 0,       // Track mistakes in the Alchemy Lab chamber
   hallMistakes: 0,      // Track mistakes in the Hall of Illusions chamber
 };
-  const knights = KNIGHTS.map((k, i) =>
-    `<button class="choice" style="border-color:${k.color}" onclick="pickKnight(${i})">${k.name}</button>`).join("");
-  show(`<h1>Knight's Escape</h1>
-        <p>Choose your knight:</p><div class="choices">${knights}</div>`);
 
-
-// Small helper: put HTML on the screen
-function show(html) {
+// Small helper: put HTML on the screen.
+// scene (optional) picks which of Tvishaa's drawings sits behind the page:
+// "door", "warlock", "maze", "lab" or "hall". See body[data-scene] in style.css.
+function show(html, scene) {
   app.innerHTML = html;
+  if (scene) document.body.dataset.scene = scene;
   window.scrollTo(0, 0);
 }
 
@@ -44,7 +42,8 @@ function startScreen() {
   const knights = KNIGHTS.map((k, i) =>
     `<button class="choice" style="border-color:${k.color}" onclick="pickKnight(${i})">${k.name}</button>`).join("");
   show(`<h1>Knight's Escape</h1>
-        <p>Choose your knight:</p><div class="choices">${knights}</div>`);
+        <p class="subtitle">An OOP Quest</p>
+        <p>Choose your knight:</p><div class="choices">${knights}</div>`, "door");
 }
 
 function pickKnight(i) {
@@ -58,7 +57,7 @@ function pickDifficulty(j) {
   player.difficulty = DIFFICULTIES[j];
   show(`<p class="warlock">${WARLOCK.name}:</p>
         <h2>"${WARLOCK.intro}"</h2>
-        <button onclick="mazeTurn(0)">Enter the dungeon</button>`);
+        <button onclick="mazeTurn(0)">Enter the dungeon</button>`, "warlock");
 }
 
 // Shared by every chamber: hint button and wrong-answer taunt
@@ -86,7 +85,7 @@ function mazeTurn(n) {
         ${codeBlock(t.code)}<h2>${t.question}</h2>
         <div class="choices">${choices}</div>
         <button class="secondary" onclick="useHint(MAZE.turns[${n}].hint)">Hint</button>
-        <p id="hint"></p><p id="feedback"></p>`);
+        <p id="hint"></p><p id="feedback"></p>`, "maze");
 }
 
 function mazeAnswer(n, i) {
@@ -118,7 +117,7 @@ function labStep(n) {
         ${codeBlock(s.code)}<h2>What does this print?</h2>
         <div class="choices">${choices}</div>
         <button class="secondary" onclick="useHint(LAB.steps[${n}].hint)">Hint</button>
-        <p id="hint"></p><p id="feedback"></p>`);
+        <p id="hint"></p><p id="feedback"></p>`, "lab");
 }
 
 function labAnswer(n, i) {
@@ -143,7 +142,7 @@ function hallRound(n) {
         ${n === 0 ? `<p class="story">${HALL.story}</p>` : ""}
         <h2>${r.question}</h2><div class="doors">${doors}</div>
         <button class="secondary" onclick="useHint(HALL.rounds[${n}].hint)">Hint</button>
-        <p id="hint"></p><p id="feedback"></p>`);
+        <p id="hint"></p><p id="feedback"></p>`, "hall");
 }
 
 function hallAnswer(n, i) {
@@ -165,7 +164,7 @@ function finalQuestion(n) {
         ${n === 0 ? `<p class="story">${FINAL.story}</p>` : ""}
         <p class="warlock">${WARLOCK.name} asks:</p><h2>${q.question}</h2>
         <textarea id="answer" rows="4" placeholder="Answer in your own words..."></textarea>
-        <button onclick="finalCheck(${n})">Answer the warlock</button><p id="feedback"></p>`);
+        <button onclick="finalCheck(${n})">Answer the warlock</button><p id="feedback"></p>`, "door");
 }
 
 function finalCheck(n) {
@@ -194,10 +193,11 @@ function earnKey(n) {
 // ---------- Escape ----------
 function escapeScreen() {
   // Determine the chamber with the most mistakes
+  // (keys are the chamber titles from rooms.js, so a renamed chamber shows its new name)
   const mistakesPerChamber = {
-    "Maze": player.mazeMistakes,
-    "Alchemy Lab": player.labMistakes,
-    "Hall of Illusions": player.hallMistakes,
+    [MAZE.title]: player.mazeMistakes,
+    [LAB.title]: player.labMistakes,
+    [HALL.title]: player.hallMistakes,
   };
 
   // Find the chamber with the most mistakes
@@ -207,15 +207,15 @@ function escapeScreen() {
 
   // Get the concept for the weak-spot chamber
   let weakSpotConcept = "";
-  if (weakSpot === "Maze") weakSpotConcept = MAZE.concept;
-  else if (weakSpot === "Alchemy Lab") weakSpotConcept = LAB.concept;
-  else if (weakSpot === "Hall of Illusions") weakSpotConcept = HALL.concept;
+  if (weakSpot === MAZE.title) weakSpotConcept = MAZE.concept;
+  else if (weakSpot === LAB.title) weakSpotConcept = LAB.concept;
+  else if (weakSpot === HALL.title) weakSpotConcept = HALL.concept;
 
   show(`<h1>You escaped!</h1>
         <p class="warlock">${WARLOCK.name}: "${WARLOCK.defeated}"</p>
         <p>${player.knight.name} · ${player.difficulty.name} · Keys: ${player.keys} of ${FINAL.questions.length} · Mistakes: ${player.mistakes}</p>
-        ${player.mistakes > 0 ? `<p class="weak-spot">Review the ${weakSpot}: ${weakSpotConcept}</p>` : ""}
-        <button onclick="startScreen()">Play again</button>`);
+        ${player.mistakes > 0 ? `<p class="weak-spot">Review ${weakSpot}: ${weakSpotConcept}</p>` : ""}
+        <button onclick="startScreen()">Play again</button>`, "door");
 }
 
 startScreen();
