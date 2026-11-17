@@ -18,11 +18,44 @@ let player = {
 // Small helper: put HTML on the screen.
 // scene (optional) picks which of Tvishaa's drawings sits behind the page:
 // "door", "warlock", "maze", "lab" or "hall". See body[data-scene] in style.css.
-function show(html, scene) {
+// title (optional): when you walk into a NEW scene, her full drawing shows first
+// as a title card with this name, then fades into the chamber.
+function show(html, scene, title) {
   app.innerHTML = html;
+  if (scene && scene !== document.body.dataset.scene && title) showSceneCard(scene, title);
   if (scene) document.body.dataset.scene = scene;
   window.scrollTo(0, 0);
 }
+
+// ---------- Title card: Tvishaa's drawing, full size ----------
+let cardTimer = null;
+
+function showSceneCard(scene, title) {
+  const card = document.getElementById("scene-card");
+  const img = document.getElementById("scene-img");
+  img.src = `art/tvishaa-${scene}.jpg`;
+  img.alt = `${title}, drawn by Tvishaa`;
+  document.getElementById("scene-title").textContent = title;
+  card.hidden = false;
+  document.body.classList.add("revealing"); // hides the chamber until the card fades
+  // Wait for the picture to load, then fade the card in
+  img.decode().catch(() => {}).then(() => requestAnimationFrame(() => card.classList.add("on")));
+  clearTimeout(cardTimer);
+  cardTimer = setTimeout(hideSceneCard, 2800);
+}
+
+function hideSceneCard() {
+  const card = document.getElementById("scene-card");
+  if (card.hidden) return;
+  clearTimeout(cardTimer);
+  card.classList.remove("on");
+  document.body.classList.remove("revealing");
+  setTimeout(() => { if (!card.classList.contains("on")) card.hidden = true; }, 600);
+}
+
+// Click or press any key to skip the title card
+document.getElementById("scene-card").addEventListener("click", hideSceneCard);
+document.addEventListener("keydown", hideSceneCard);
 
 function codeBlock(code) {
   const safe = code.replace(/&/g, "&amp;").replace(/</g, "&lt;");
@@ -43,7 +76,7 @@ function startScreen() {
     `<button class="choice" style="border-color:${k.color}" onclick="pickKnight(${i})">${k.name}</button>`).join("");
   show(`<h1>Knight's Escape</h1>
         <p class="subtitle">An OOP Quest</p>
-        <p>Choose your knight:</p><div class="choices">${knights}</div>`, "door");
+        <p>Choose your knight:</p><div class="choices">${knights}</div>`, "door", "Knight's Escape");
 }
 
 function pickKnight(i) {
@@ -57,7 +90,7 @@ function pickDifficulty(j) {
   player.difficulty = DIFFICULTIES[j];
   show(`<p class="warlock">${WARLOCK.name}:</p>
         <h2>"${WARLOCK.intro}"</h2>
-        <button onclick="mazeTurn(0)">Enter the dungeon</button>`, "warlock");
+        <button onclick="mazeTurn(0)">Enter the dungeon</button>`, "warlock", WARLOCK.name);
 }
 
 // Shared by every chamber: hint button and wrong-answer taunt
@@ -85,7 +118,7 @@ function mazeTurn(n) {
         ${codeBlock(t.code)}<h2>${t.question}</h2>
         <div class="choices">${choices}</div>
         <button class="secondary" onclick="useHint(MAZE.turns[${n}].hint)">Hint</button>
-        <p id="hint"></p><p id="feedback"></p>`, "maze");
+        <p id="hint"></p><p id="feedback"></p>`, "maze", MAZE.title);
 }
 
 function mazeAnswer(n, i) {
@@ -117,7 +150,7 @@ function labStep(n) {
         ${codeBlock(s.code)}<h2>What does this print?</h2>
         <div class="choices">${choices}</div>
         <button class="secondary" onclick="useHint(LAB.steps[${n}].hint)">Hint</button>
-        <p id="hint"></p><p id="feedback"></p>`, "lab");
+        <p id="hint"></p><p id="feedback"></p>`, "lab", LAB.title);
 }
 
 function labAnswer(n, i) {
@@ -142,7 +175,7 @@ function hallRound(n) {
         ${n === 0 ? `<p class="story">${HALL.story}</p>` : ""}
         <h2>${r.question}</h2><div class="doors">${doors}</div>
         <button class="secondary" onclick="useHint(HALL.rounds[${n}].hint)">Hint</button>
-        <p id="hint"></p><p id="feedback"></p>`, "hall");
+        <p id="hint"></p><p id="feedback"></p>`, "hall", HALL.title);
 }
 
 function hallAnswer(n, i) {
@@ -164,7 +197,7 @@ function finalQuestion(n) {
         ${n === 0 ? `<p class="story">${FINAL.story}</p>` : ""}
         <p class="warlock">${WARLOCK.name} asks:</p><h2>${q.question}</h2>
         <textarea id="answer" rows="4" placeholder="Answer in your own words..."></textarea>
-        <button onclick="finalCheck(${n})">Answer the warlock</button><p id="feedback"></p>`, "door");
+        <button onclick="finalCheck(${n})">Answer the warlock</button><p id="feedback"></p>`, "door", FINAL.title);
 }
 
 function finalCheck(n) {

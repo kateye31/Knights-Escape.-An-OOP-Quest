@@ -17,6 +17,17 @@ Knight's Escape is a browser escape room that teaches Java object-oriented progr
 
 ![The Hall of Illusions: three arched code doors in green, purple and teal, in front of Tvishaa's drawing of the same three doors](docs/img/hall.jpg)
 
+### Every chamber opens on Tvishaa's drawing
+
+When you walk into a new chamber, her full drawing shows first, uncropped, with the chamber's name. Then it fades into the puzzle, and the drawing stays behind you while you play. Click or press any key to skip ahead.
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/img/card-maze.jpg" alt="Title card: Tvishaa's full hand-drawn hedge maze with Start and End arrows, captioned LabyrinthLearn"></td>
+    <td width="50%"><img src="docs/img/card-lab.jpg" alt="Title card: Tvishaa's full drawing of the alchemy lab with a bubbling green cauldron, captioned The Alchemy Lab"></td>
+  </tr>
+</table>
+
 ## Play it
 
 Download or clone this repo and open `index.html` in any browser. There's nothing to install and no internet needed.
@@ -62,7 +73,7 @@ Difficulty sets your hints per chamber: **Squire** 3, **Knight** 2, **Champion**
   </tr>
 </table>
 
-<p align="center"><img src="docs/img/phone.jpg" width="560" alt="The game on two phone screens: the Hall of Illusions doors stacked, and the title screen"><br><b>Works on phones too.</b></p>
+<p align="center"><img src="docs/img/phone.jpg" width="560" alt="The game on two phone screens: the opening title card with the castle door, and the Hall of Illusions doors stacked"><br><b>Works on phones too.</b></p>
 
 ## Who made what
 
@@ -80,10 +91,10 @@ The team picked the name, the colors and the look together in Council votes on o
 
 ## Design
 
-- **Art:** all five scenes are Tvishaa's own drawings (in [`art/`](art/)). Each one sits behind the chamber it belongs to.
+- **Art:** all five scenes are Tvishaa's own drawings (in [`art/`](art/)). Each chamber opens on a title card with her full drawing, then the drawing sits behind the chamber while you play. The files are cleanly upscaled 2× so they stay sharp on big screens.
 - **Colors:** pulled straight from her drawings: brick and wood browns, maze-coin gold, hedge green, and the green, purple and teal of her three Hall doors, which the code doors match.
 - **Fonts:** Microsoft fonts that come with Windows and Office. **Castellar** (carved capitals) for big titles, **Constantia** for reading, **Cascadia Mono** / Consolas for code.
-- **Motion:** Shirley's hover lift, which turns off for anyone who asks their computer for reduced motion.
+- **Motion:** Shirley's hover lift on every button, and a quiet crossfade from each title card into its chamber (opacity and a 10px slide, no bounce or zoom). Both turn off for anyone whose computer asks for reduced motion.
 
 ## How the code works
 
@@ -110,7 +121,7 @@ Every puzzle is plain data, so adding one means copying a block in `rooms.js`:
 },
 ```
 
-To pick which drawing sits behind a screen, `game.js` passes a scene name to `show()`, like `show(html, "maze")`. `style.css` maps each name to a picture in `art/`.
+To pick which drawing sits behind a screen, `game.js` passes a scene name and a title to `show()`, like `show(html, "maze", MAZE.title)`. The first time a scene appears, `showSceneCard()` shows `art/tvishaa-maze.jpg` full size with that title, then fades into the chamber.
 
 ## Contributing
 

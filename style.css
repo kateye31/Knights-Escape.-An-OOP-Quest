@@ -23,6 +23,8 @@
   --font-title: "Castellar", "Constantia", Georgia, serif;
   --font-body: "Constantia", "Palatino Linotype", Georgia, serif;
   --font-code: "Cascadia Mono", Consolas, "Courier New", monospace;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1); /* fast start, gentle stop */
 }
 
 body {
@@ -52,6 +54,52 @@ body[data-scene="warlock"] { --scene: url("art/tvishaa-warlock.jpg"); }
 body[data-scene="maze"]    { --scene: url("art/tvishaa-maze.jpg"); }
 body[data-scene="lab"]     { --scene: url("art/tvishaa-lab.jpg"); }
 body[data-scene="hall"]    { --scene: url("art/tvishaa-hall.jpg"); }
+
+/* Title card: Tvishaa's full drawing, shown when you enter a new chamber.
+   It fades in, holds, then crossfades into the chamber. Opacity and a small slide only. */
+.scene-card {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  background: #0d0905;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 600ms var(--ease-out);
+}
+.scene-card[hidden] { display: none; }
+.scene-card.on { opacity: 1; transition-duration: 450ms; }
+.scene-card figure { margin: 0; text-align: center; }
+.scene-card img {
+  display: block;
+  margin: 0 auto;
+  width: auto;
+  height: auto;
+  max-width: min(100%, 1180px);
+  max-height: 74vh;
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+}
+.scene-card figcaption {
+  margin-top: 18px;
+  font-family: var(--font-title);
+  font-size: clamp(26px, 4vw, 40px);
+  line-height: 1.1;
+  color: var(--torch);
+}
+.scene-skip { margin: 10px 0 0; font-size: 14px; color: var(--muted); }
+
+/* The chamber waits behind the card, then slides up a little as it fades in */
+main, footer {
+  transition: opacity 500ms var(--ease-out) 120ms, transform 500ms var(--ease-out) 120ms;
+}
+body.revealing main,
+body.revealing footer { opacity: 0; transform: translateY(10px); transition: none; }
 
 main {
   max-width: 760px;
@@ -197,6 +245,6 @@ footer span { display: inline-block; background: rgba(11, 8, 6, 0.75); padding: 
 }
 
 @media (prefers-reduced-motion: reduce) {
-  button { transition: none; }
-  button:hover { transform: none; }
+  button, main, footer, .scene-card, .scene-card.on { transition: none; }
+  button:hover, body.revealing main, body.revealing footer { transform: none; }
 }
