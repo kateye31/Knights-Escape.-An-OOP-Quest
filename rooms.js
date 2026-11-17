@@ -26,10 +26,10 @@ const WARLOCK = {
   defeated: "No! You've escaped my dungeon. You truly understand objects...",
 };
 
-// ---------- Chamber 1: The Maze ----------
+// ---------- Chamber 1: The Maze (Renamed to LabyrinthLearn) ----------
 // 5 turns. Each turn is a multiple-choice question; the right answer is the right direction.
 const MAZE = {
-  title: "The Maze",
+  title: "LabyrinthLearn",
   concept: "Classes and objects",
   story: "Stone walls twist in every direction. Choose the right path at each turn.",
   turns: [
@@ -88,19 +88,36 @@ const LAB = {
   concept: "Methods and return values",
   story: "Bubbling potions line the shelves. Each one whispers a word when you read its code.",
   steps: [
+    // Step 1: Print "Squire"
     {
-      code: 'class Potion {\n    String word() { return "OPEN"; }\n}\n\nSystem.out.println(new Potion().word());',
-      choices: ["OPEN", "word", "Potion"],
+      code: 'class Knight {\n    String title() { return "Squire"; }\n}\n\nSystem.out.println(new Knight().title());',
+      choices: ["Squire", "title", "Knight"],
       answer: 0,
-      hint: "What does the word() method return?",
+      hint: "What does the title() method return?",
     },
+    // Step 2: Print "doing"
     {
-      code: 'String s = "sesame";\nSystem.out.println(s.toUpperCase());',
-      choices: ["sesame", "SESAME", "s"],
+      code: 'String action = "doing";\nSystem.out.println(action);',
+      choices: ["do", "doing", "action"],
       answer: 1,
-      hint: "toUpperCase() returns a new String in capital letters.",
+      hint: "The variable 'action' holds the string 'doing'.",
     },
-    // TODO (Leslie/Sanjana): 2 more steps, so the spell has 4 words
+
+      // Step 3 (Fixed): Print "king's"
+    {
+      code: 'String possessive = "king";\nSystem.out.println(possessive + "\'s");',
+      choices: ["king", "king's", "possessive"],
+      answer: 1,
+      hint: "Adding '\\'s' to 'king' makes it possessive.",
+    },
+
+    // Step 4: Print "work" using encapsulation
+    {
+      code: 'class Squire {\n    private String task = "work";\n    \n    String getTask() {\n        return this.task;\n    }\n}\n\nSystem.out.println(new Squire().getTask());',
+      choices: ["work", "task", "Squire"],
+      answer: 0,
+            hint: "The getTask() method returns the private 'task' variable.",
+    }
   ],
 };
 
@@ -161,4 +178,3 @@ const FINAL = {
     },
   ],
 };
-// Lol 
