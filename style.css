@@ -64,8 +64,10 @@ body[data-scene="hall"]    { --scene: url("art/tvishaa-hall.jpg"); }
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 24px 16px;
+  justify-content: safe center; /* centered, but never cut off at the top */
+  padding: 16px;
+  box-sizing: border-box;
+  overflow-y: auto;             /* last resort on very small screens */
   background: #0d0905;
   cursor: pointer;
   opacity: 0;
@@ -80,20 +82,24 @@ body[data-scene="hall"]    { --scene: url("art/tvishaa-hall.jpg"); }
   width: auto;
   height: auto;
   max-width: min(100%, 1180px);
-  max-height: 74vh;
+  /* the drawing gets whatever height is left after the title, button and credit */
+  max-height: max(160px, calc(100vh - 240px));
+  max-height: max(160px, calc(100dvh - 240px));
   border: 3px solid var(--ink);
   border-radius: 14px;
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
 }
-.scene-card figcaption { margin-top: 16px; }
+.scene-card figcaption { margin-top: min(16px, 2vh); }
 .scene-label { display: block; color: var(--muted); font-size: 17px; font-style: italic; }
 .scene-title {
   display: block;
   font-family: var(--font-title);
-  font-size: clamp(26px, 4vw, 40px);
+  font-size: clamp(24px, min(4vw, 5.5vh), 40px);
   line-height: 1.15;
   color: var(--torch);
 }
+/* while a title card is up, the page behind it doesn't scroll */
+body.revealing { overflow: hidden; }
 .scene-enter { margin: 14px 0 0; padding: 8px 28px; }
 .scene-skip { margin: 10px 0 0; font-size: 14px; color: var(--muted); }
 
@@ -157,7 +163,7 @@ button {
 }
 button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 206, 51, 0.25);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.45);
 }
 button:active { transform: translateY(0); }
 button:focus-visible { outline: 3px solid var(--torch); outline-offset: 2px; }
@@ -397,7 +403,7 @@ footer span { display: inline-block; background: rgba(11, 8, 6, 0.75); padding: 
 .door-2 { --door-color: var(--door-purple); }
 .door-3 { --door-color: var(--door-teal); }
 /* Shirley's lift, on the doors too */
-.hall-door:not(:disabled):hover .door-display { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 206, 51, 0.25); }
+.hall-door:not(:disabled):hover .door-display { transform: translateY(-2px); box-shadow: 0 5px 12px rgba(0, 0, 0, 0.45); }
 .hall-door:focus-visible { outline: none; }
 .hall-door:focus-visible .door-display { outline: 3px solid var(--torch); outline-offset: 2px; }
 /* A wrong door: the illusion fades into the wall */
@@ -450,17 +456,168 @@ footer span { display: inline-block; background: rgba(11, 8, 6, 0.75); padding: 
 .keyhole.new { animation: key-in 0.45s var(--ease-out); }
 @keyframes key-in { from { opacity: 0.2; transform: scale(0.7); } to { opacity: 1; transform: scale(1); } }
 
+/* ---------- The black fade between the game and About (about.js) ---------- */
+/* Solid black with a soft lower edge, so it reads as a smooth fade from top to bottom */
+.curtain {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 135vh;
+  z-index: 20;
+  pointer-events: none;
+  background: linear-gradient(to bottom, #000 0, #000 74%, rgba(0, 0, 0, 0) 100%);
+  transform: translateY(-100%);
+  visibility: hidden;
+}
+.curtain.down {
+  visibility: visible;
+  transform: translateY(0);
+  transition: transform 700ms cubic-bezier(0.65, 0, 0.35, 1);
+}
+.curtain.lift { opacity: 0; transition: opacity 450ms var(--ease-out); }
+
+/* Link between the game and About, above the panel */
+.site-nav { max-width: 900px; margin: 16px auto -24px; padding: 0 16px; text-align: right; }
+.link-button {
+  margin: 0;
+  padding: 6px 12px;
+  border: 1px solid rgba(255, 206, 51, 0.5);
+  border-radius: 10px;
+  background: rgba(11, 8, 6, 0.75);
+  color: var(--torch);
+  font-size: 15px;
+}
+body.revealing .site-nav { visibility: hidden; }
+
+/* ---------- About the creators ---------- */
+body.viewing-about { --scene: url("art/tvishaa-door.jpg"); }
+.about {
+  max-width: 900px;
+  margin: 40px auto 16px;
+  padding: 32px;
+  box-sizing: border-box;
+  background: var(--panel);
+  border: 3px solid var(--ink);
+  border-radius: 20px;
+  box-shadow: 0 6px 0 var(--ink);
+}
+.about[hidden], main[hidden] { display: none; }
+.about-head h1 { margin-bottom: 4px; }
+.about-lead { font-size: 21px; line-height: 1.5; color: #f6ead2; max-width: 62ch; }
+.about h2 { font-family: var(--font-title); font-weight: normal; color: var(--torch); font-size: 26px; margin: 32px 0 8px; }
+.about > p { max-width: 68ch; }
+.about-note { color: var(--muted); font-size: 15px; font-style: italic; margin-top: 0; }
+
+.people { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin: 12px 0 22px; }
+.people > .person:last-child:nth-child(odd) { grid-column: 1 / -1; justify-self: center; width: calc(50% - 9px); box-sizing: border-box; }
+.person {
+  padding: 0 18px 18px;
+  background: #2a1e12;
+  border: 3px solid var(--ink);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.person figure { margin: 0 -18px 14px; }
+.person figure img {
+  display: block;
+  width: 100%;
+  height: 130px;
+  object-fit: cover;
+  border-bottom: 3px solid var(--ink);
+}
+.person figcaption { padding: 6px 18px 0; font-size: 13px; color: var(--muted); font-style: italic; }
+.person h3 { margin: 0; font-size: 25px; color: var(--text); }
+.person .role { margin: 2px 0 10px; color: var(--muted); font-size: 15px; }
+.person .role b { color: var(--torch); }
+.person blockquote {
+  margin: 0 0 12px;
+  padding: 0 0 0 12px;
+  border-left: 1px solid rgba(255, 206, 51, 0.5);
+  color: #f6ead2;
+  font-style: italic;
+}
+.started { margin: 0 0 10px; padding: 10px 14px; background: rgba(11, 8, 6, 0.5); border-radius: 10px; }
+.started dt { margin-bottom: 6px; color: var(--torch); font-weight: bold; }
+.started dd { margin: 0 0 4px; font-size: 15px; line-height: 1.45; color: #ecdcbf; }
+.started dd span { color: var(--muted); }
+.built { margin: 0; font-size: 15px; line-height: 1.5; }
+.started.joined { font-size: 16px; font-style: italic; color: #ecdcbf; }
+.person .highlight { margin: 0 0 10px; font-size: 17px; line-height: 1.45; color: #f6ead2; }
+.person blockquote.proud { margin: 12px 0 0; }
+
+/* The story: six short steps in a grid (one column on phones) */
+.timeline {
+  list-style: none;
+  margin: 8px 0 14px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  counter-reset: step;
+}
+.timeline li {
+  position: relative;
+  padding: 12px 14px 12px 44px;
+  background: #2a1e12;
+  border: 2px solid var(--ink);
+  border-radius: 12px;
+  font-size: 15px;
+  line-height: 1.45;
+  counter-increment: step;
+}
+.timeline li::before {
+  content: counter(step);
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--torch);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: bold;
+  line-height: 22px;
+  text-align: center;
+}
+.timeline b { display: block; margin-bottom: 2px; color: var(--torch); }
+.growth { padding: 14px 18px; background: rgba(11, 8, 6, 0.5); border-radius: 12px; }
+.growth b { color: var(--torch); }
+
+/* From sketch to game: her sketches and Figma roadmap side by side */
+.gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; align-items: start; }
+.gallery figure { margin: 0; padding: 10px; background: #2a1e12; border: 3px solid var(--ink); border-radius: 14px; }
+.gallery img { display: block; width: 100%; height: 190px; object-fit: cover; object-position: 0% 50%; border-radius: 8px; }
+.gallery figcaption { margin-top: 8px; font-size: 15px; }
+.gallery-note { margin: 6px 0 0; color: var(--muted); font-size: 15px; font-style: italic; }
+
+.thanks { margin: 26px 0 8px; font-size: 22px; font-style: italic; color: #f6ead2; }
+.thanks span { display: block; margin-top: 2px; font-size: 16px; font-style: normal; color: var(--muted); }
+
+.gwc { display: flex; align-items: center; gap: 16px; margin: 26px 0 24px; padding-top: 22px; border-top: 1px solid rgba(255, 206, 51, 0.25); }
+.gwc img { width: 88px; height: 88px; border-radius: 50%; border: 3px solid var(--ink); flex: none; }
+.gwc p { margin: 0; }
+.gwc p span { display: block; font-size: 13px; color: var(--muted); font-style: italic; }
+.about-play { font-size: 19px; padding: 12px 24px; }
+
 @media (max-width: 700px) {
   .doors { grid-template-columns: 1fr; }
   main { margin: 16px; padding: 20px; }
   h1 { font-size: 30px; }
   .scroll-box { margin: 16px 10px 12px; padding: 12px 16px; }
   pre { font-size: 13px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .about { margin: 16px; padding: 20px; }
+  .people, .timeline, .gallery { grid-template-columns: 1fr; }
+  .people > .person:last-child:nth-child(odd) { grid-column: auto; width: auto; }
+  .site-nav { margin: 12px auto -4px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   button, main, footer, .scene-card, .scene-card.on, .door-display, .door-shade { transition: none; }
   button:hover, body.revealing main, body.revealing footer, .hall-door:hover .door-display { transform: none; }
   .brew-tint, .keyhole.new { animation: none; }
+  .curtain, .curtain.down, .curtain.lift { transition: none; }
   .brew.bad .brew-tint { opacity: 0.8; }
 }
