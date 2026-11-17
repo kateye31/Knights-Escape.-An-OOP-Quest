@@ -17,45 +17,13 @@ let player = {
 
 // Small helper: put HTML on the screen.
 // scene (optional) picks which of Tvishaa's drawings sits behind the page:
-// "door", "warlock", "maze", "lab" or "hall". See body[data-scene] in style.css.
-// title (optional): when you walk into a NEW scene, her full drawing shows first
-// as a title card with this name, then fades into the chamber.
-function show(html, scene, title) {
+// "door", "maze", "lab", "hall" or "warlock". See body[data-scene] in style.css.
+// Her drawings, title cards and what happens on them live in scenes.js.
+function show(html, scene) {
   app.innerHTML = html;
-  if (scene && scene !== document.body.dataset.scene && title) showSceneCard(scene, title);
   if (scene) document.body.dataset.scene = scene;
   window.scrollTo(0, 0);
 }
-
-// ---------- Title card: Tvishaa's drawing, full size ----------
-let cardTimer = null;
-
-function showSceneCard(scene, title) {
-  const card = document.getElementById("scene-card");
-  const img = document.getElementById("scene-img");
-  img.src = `art/tvishaa-${scene}.jpg`;
-  img.alt = `${title}, drawn by Tvishaa`;
-  document.getElementById("scene-title").textContent = title;
-  card.hidden = false;
-  document.body.classList.add("revealing"); // hides the chamber until the card fades
-  // Wait for the picture to load, then fade the card in
-  img.decode().catch(() => {}).then(() => requestAnimationFrame(() => card.classList.add("on")));
-  clearTimeout(cardTimer);
-  cardTimer = setTimeout(hideSceneCard, 2800);
-}
-
-function hideSceneCard() {
-  const card = document.getElementById("scene-card");
-  if (card.hidden) return;
-  clearTimeout(cardTimer);
-  card.classList.remove("on");
-  document.body.classList.remove("revealing");
-  setTimeout(() => { if (!card.classList.contains("on")) card.hidden = true; }, 600);
-}
-
-// Click or press any key to skip the title card
-document.getElementById("scene-card").addEventListener("click", hideSceneCard);
-document.addEventListener("keydown", hideSceneCard);
 
 function codeBlock(code) {
   const safe = code.replace(/&/g, "&amp;").replace(/</g, "&lt;");
@@ -76,7 +44,7 @@ function startScreen() {
     `<button class="choice" style="border-color:${k.color}" onclick="pickKnight(${i})">${k.name}</button>`).join("");
   show(`<h1>Knight's Escape</h1>
         <p class="subtitle">An OOP Quest</p>
-        <p>Choose your knight:</p><div class="choices">${knights}</div>`, "door", "Knight's Escape");
+        <p>Choose your knight:</p><div class="choices">${knights}</div>`, "door");
 }
 
 function pickKnight(i) {
@@ -88,9 +56,12 @@ function pickKnight(i) {
 
 function pickDifficulty(j) {
   player.difficulty = DIFFICULTIES[j];
-  show(`<p class="warlock">${WARLOCK.name}:</p>
-        <h2>"${WARLOCK.intro}"</h2>
-        <button onclick="mazeTurn(0)">Enter the dungeon</button>`, "warlock", WARLOCK.name);
+  // The storyline intro goes in Tvishaa's question box (scroll-box)
+  show(`<div class="scroll-box">
+          <p class="warlock">${WARLOCK.name}:</p>
+          <h2>"${WARLOCK.intro}"</h2>
+        </div>
+        <button onclick="mazeTurn(0)">Enter the dungeon</button>`, "door");
 }
 
 // Shared by every chamber: hint button and wrong-answer taunt
@@ -111,14 +82,18 @@ function mazeTurn(n) {
   if (n >= MAZE.turns.length) return labStep(0);
   const t = MAZE.turns[n];
   const mazeNumber = n + 1;
-  const choices = t.choices.map((c, i) => `<button class="choice" onclick="mazeAnswer(${n}, ${i})">${c}</button>`).join("");
+  const choices = t.choices.map((c, i) => `<button class="choice" onclick="mazeAnswer(${n}, ${i})">${arrowLabel(c)}</button>`).join("");
+  // First turn: Tvishaa's Maze door, then the knight walks from Start to her number 1
+  if (n === 0 && document.body.dataset.scene !== "maze") titleCard("door", "Chamber 1", MAZE.title);
+  const board = `<p class="maze-board">Maze ${mazeNumber} of ${MAZE.turns.length}</p>`;
   show(`${header(MAZE, mazeNumber, MAZE.turns.length)}
-        <p class="maze-board">Maze ${mazeNumber} of ${MAZE.turns.length}</p>
+        ${mazeStage(n === 0 ? 0 : mazeNumber, board)}
         ${n === 0 ? `<p class="story">${MAZE.story}</p>` : ""}
-        ${codeBlock(t.code)}<h2>${t.question}</h2>
+        <div class="scroll-box">${codeBlock(t.code)}<h2>${t.question}</h2></div>
         <div class="choices">${choices}</div>
         <button class="secondary" onclick="useHint(MAZE.turns[${n}].hint)">Hint</button>
-        <p id="hint"></p><p id="feedback"></p>`, "maze", MAZE.title);
+        <p id="hint"></p><p id="feedback"></p>`, "maze");
+  if (n === 0) whenCardCloses(() => walkKnight(0, 1));
 }
 
 function mazeAnswer(n, i) {
@@ -126,31 +101,38 @@ function mazeAnswer(n, i) {
   if (i !== t.answer) {
     player.mistakes++;
     player.mazeMistakes++;
+    bumpKnight(arrowDirection(t.choices[i]));
     taunt();
     document.getElementById("feedback").textContent += ` ${t.wrong[i]}`;
     return;
   }
   const mazeNumber = n + 1;
-  show(`<p class="maze-board">Maze ${mazeNumber} of ${MAZE.turns.length}</p>
+  const board = `<p class="maze-board">Maze ${mazeNumber} of ${MAZE.turns.length}</p>`;
+  show(`${header(MAZE, mazeNumber, MAZE.turns.length)}
+        ${mazeStage(mazeNumber, board)}
         <h2>The path opens.</h2><p>${t.explain}</p><button onclick="mazeTurn(${n + 1})">Keep going</button>`);
+  walkKnight(mazeNumber, mazeNumber + 1); // to her next number, or to End after turn 5
 }
 
 // ---------- Chamber 2: The Alchemy Lab ----------
 function labStep(n) {
   if (n === 0) { player.hintsLeft = player.difficulty.hints; player.spell = []; }
   if (n >= LAB.steps.length) {
-    return show(`<h2>The spell is complete:</h2><p class="spell">${player.spell.join(" ")}</p>
+    return show(`${labStage()}
+                 <h2>The spell is complete:</h2><p class="spell">${player.spell.join(" ")}</p>
                  <button onclick="hallRound(0)">Cast it</button>`);
   }
   const s = LAB.steps[n];
   const choices = s.choices.map((c, i) => `<button class="choice" onclick="labAnswer(${n}, ${i})">${c}</button>`).join("");
+  if (n === 0 && document.body.dataset.scene !== "lab") titleCard("lab", "Chamber 2", LAB.title);
   show(`${header(LAB, n + 1, LAB.steps.length)}
+        ${labStage()}
         ${n === 0 ? `<p class="story">${LAB.story}</p>` : ""}
         <p>Spell so far: <span class="spell">${player.spell.join(" ") || "..."}</span></p>
-        ${codeBlock(s.code)}<h2>What does this print?</h2>
+        <div class="scroll-box">${codeBlock(s.code)}<h2>What does this print?</h2></div>
         <div class="choices">${choices}</div>
         <button class="secondary" onclick="useHint(LAB.steps[${n}].hint)">Hint</button>
-        <p id="hint"></p><p id="feedback"></p>`, "lab", LAB.title);
+        <p id="hint"></p><p id="feedback"></p>`, "lab");
 }
 
 function labAnswer(n, i) {
@@ -158,10 +140,16 @@ function labAnswer(n, i) {
   if (i !== s.answer) {
     player.mistakes++;
     player.labMistakes++;
+    brew(false); // the brew turns murky
     return taunt();
   }
-  player.spell.push(s.choices[s.answer]);
-  labStep(n + 1);
+  // Right answer: green bubbles, the word rises out of the cauldron, then the next potion
+  const word = s.choices[s.answer];
+  player.spell.push(word);
+  document.querySelectorAll(".choices button").forEach((b) => (b.disabled = true));
+  document.getElementById("feedback").textContent = "";
+  brew(true, word);
+  setTimeout(() => labStep(n + 1), window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 500 : 1400);
 }
 
 // ---------- Chamber 3: The Hall of Illusions ----------
@@ -169,13 +157,14 @@ function hallRound(n) {
   if (n === 0) player.hintsLeft = player.difficulty.hints;
   if (n >= HALL.rounds.length) return finalQuestion(0);
   const r = HALL.rounds[n];
-  const doors = r.doors.map((code, i) =>
-    `<button class="door" onclick="hallAnswer(${n}, ${i})"><b>Door ${i + 1}</b>${codeBlock(code)}</button>`).join("");
+  // The code for each door sits on Tvishaa's drawn doors (see hallStage in scenes.js)
+  if (n === 0 && document.body.dataset.scene !== "hall") titleCard("hall", "Chamber 3", HALL.title);
   show(`${header(HALL, n + 1, HALL.rounds.length)}
         ${n === 0 ? `<p class="story">${HALL.story}</p>` : ""}
-        <h2>${r.question}</h2><div class="doors">${doors}</div>
+        <div class="scroll-box"><h2>${r.question}</h2></div>
+        ${hallStage(n)}
         <button class="secondary" onclick="useHint(HALL.rounds[${n}].hint)">Hint</button>
-        <p id="hint"></p><p id="feedback"></p>`, "hall", HALL.title);
+        <p id="hint"></p><p id="feedback"></p>`, "hall");
 }
 
 function hallAnswer(n, i) {
@@ -183,9 +172,13 @@ function hallAnswer(n, i) {
   if (i !== r.answer) {
     player.mistakes++;
     player.hallMistakes++;
+    markDoor(i, "illusion"); // that door fades into the wall
     return taunt();
   }
-  show(`<h2>The illusion fades. That door was real.</h2><p>${r.explain}</p><button onclick="hallRound(${n + 1})">Walk through</button>`);
+  const marks = r.doors.map((d, j) => (j === i ? "real" : "illusion"));
+  show(`${header(HALL, n + 1, HALL.rounds.length)}
+        ${hallStage(n, marks, false)}
+        <h2>The illusion fades. That door was real.</h2><p>${r.explain}</p><button onclick="hallRound(${n + 1})">Walk through</button>`);
 }
 
 // ---------- Chamber 4: The Final Door ----------
@@ -193,11 +186,14 @@ function hallAnswer(n, i) {
 function finalQuestion(n) {
   if (n >= FINAL.questions.length) return escapeScreen();
   const q = FINAL.questions[n];
+  // Tvishaa's sketch: the warlock guards the Final Door, holding the key
+  if (n === 0 && document.body.dataset.scene !== "warlock") titleCard("warlock", "Chamber 4", FINAL.title);
   show(`${header(FINAL, n + 1, FINAL.questions.length)}
+        ${warlockStage()}
         ${n === 0 ? `<p class="story">${FINAL.story}</p>` : ""}
-        <p class="warlock">${WARLOCK.name} asks:</p><h2>${q.question}</h2>
+        <div class="scroll-box"><p class="warlock">${WARLOCK.name} asks:</p><h2>${q.question}</h2></div>
         <textarea id="answer" rows="4" placeholder="Answer in your own words..."></textarea>
-        <button onclick="finalCheck(${n})">Answer the warlock</button><p id="feedback"></p>`, "door", FINAL.title);
+        <button onclick="finalCheck(${n})">Answer the warlock</button><p id="feedback"></p>`, "warlock");
 }
 
 function finalCheck(n) {
@@ -215,7 +211,8 @@ function finalCheck(n) {
 function earnKey(n) {
   player.keys++;
   const q = FINAL.questions[n];
-  show(`<p class="warlock">Key earned!</p>
+  show(`${warlockStage(player.keys - 1)}
+        <p class="warlock">Key earned!</p>
         <div class="flashcard">
           <p class="flashcard-label">Key flashcard</p>
           <p>${q.model}</p>

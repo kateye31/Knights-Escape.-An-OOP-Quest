@@ -7,17 +7,22 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Title card: shows Tvishaa's full drawing before each chamber (see showSceneCard in game.js) -->
+  <!-- Title card: Tvishaa's full drawing before each chamber (see titleCard in scenes.js) -->
   <div id="scene-card" class="scene-card" hidden>
     <figure>
       <img id="scene-img" alt="">
-      <figcaption id="scene-title"></figcaption>
+      <figcaption>
+        <span id="scene-label" class="scene-label"></span>
+        <span id="scene-title" class="scene-title"></span>
+      </figcaption>
     </figure>
-    <p class="scene-skip">Drawing by Tvishaa · click to continue</p>
+    <button id="scene-enter" class="scene-enter">Enter</button>
+    <p class="scene-skip">Drawing by Tvishaa</p>
   </div>
   <main id="app"></main>
   <footer><span>Chamber drawings by Tvishaa · Made by Group 9: Leslie, Sanjana, Shirley and Tvishaa</span></footer>
   <script src="rooms.js"></script>
+  <script src="scenes.js"></script>
   <script src="game.js"></script>
 </body>
 </html>
