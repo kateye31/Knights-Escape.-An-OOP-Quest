@@ -23,6 +23,8 @@ Knight's Escape is a browser escape room that teaches Java object-oriented progr
 
 Or download this repo and open `index.html`. It runs offline too.
 
+**🎬 [Watch the 2-minute demo](docs/video/knights-escape-demo.webm)**: a calm play-through of all four chambers, then how we built it. Captions only, no sound.
+
 ### Every chamber opens on Tvishaa's drawing
 
 When you walk into a new chamber, her full drawing shows first, uncropped, with the chamber number and name ("Chamber 1 · LabyrinthLearn"). It waits for you: click **Enter**, click anywhere, or press any key to step inside. Chamber 1 opens on her castle door, since that's the way into the maze.
