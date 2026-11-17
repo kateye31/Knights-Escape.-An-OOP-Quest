@@ -10,7 +10,7 @@
   <!-- Title card: Tvishaa's full drawing before each chamber (see titleCard in scenes.js) -->
   <div id="scene-card" class="scene-card" hidden>
     <figure>
-      <img id="scene-img" alt="">
+      <img id="scene-img" src="art/tvishaa-door.jpg" alt="">
       <figcaption>
         <span id="scene-label" class="scene-label"></span>
         <span id="scene-title" class="scene-title"></span>
@@ -19,10 +19,153 @@
     <button id="scene-enter" class="scene-enter">Enter</button>
     <p class="scene-skip">Drawing by Tvishaa</p>
   </div>
+
+  <!-- The black fade between the game and the About page (see about.js) -->
+  <div id="curtain" class="curtain" aria-hidden="true"></div>
+
+  <nav class="site-nav">
+    <button id="about-link" class="link-button" onclick="showAbout()">Meet the creators</button>
+  </nav>
+
   <main id="app"></main>
+
+  <!-- ---------- Meet the creators ---------- -->
+  <section id="about" class="about" hidden>
+    <header class="about-head">
+      <h1>Meet the creators</h1>
+      <p class="about-lead">Most of us started with small tech backgrounds, and together we built a beautiful, fully working game.</p>
+      <p class="about-note">"Where she started" is summed up from our kickoff survey.</p>
+    </header>
+
+    <!-- ---------- The core team: everyone at the same level, role under each name ---------- -->
+    <h2>The core team</h2>
+    <div class="people">
+      <!-- Design team -->
+      <article class="person">
+        <figure>
+          <img src="art/tvishaa-warlock.jpg" alt="Tvishaa's drawing of the hooded warlock holding a torch staff and a gold key" style="object-position: 50% 30%">
+          <figcaption>The warlock · drawing by Tvishaa</figcaption>
+        </figure>
+        <h3>Tvishaa</h3>
+        <!-- TODO (Katrina): confirm Tvishaa's major. Showing "IT / CS" for now. -->
+        <p class="role"><b>Design team</b> · IT / CS</p>
+        <p class="highlight">Our painter. She designed the game, then drew every room of it.</p>
+        <dl class="started">
+          <dt>Where she started</dt>
+          <dd>She joined after our kickoff survey, and really stepped up.</dd>
+        </dl>
+        <p class="built"><b>Built:</b> the Figma design roadmap, every drawing in the game, the planning sketches, and the warlock's name ideas.</p>
+      </article>
+
+      <article class="person">
+        <figure>
+          <img src="art/shirley-fall.jpg" alt="Screenshot of Shirley's light fall design for the game's start screen, with soft cream panels and leaf colors" style="object-position: 0% 50%">
+          <figcaption>Shirley's light fall design · screenshot of her work</figcaption>
+        </figure>
+        <h3>Shirley</h3>
+        <p class="role"><b>Design team</b> · IT</p>
+        <p class="highlight">She gave the game its motion. Every button you press lifts because of her.</p>
+        <dl class="started">
+          <dt>Where she started</dt>
+          <dd>New to coding, and learning C, HTML/CSS and Python.</dd>
+        </dl>
+        <p class="built"><b>Built:</b> the page animations (buttons and Hall doors lift when you point at them) and the light fall look.</p>
+        <blockquote class="proud">"proud of how it all turn out to be!"</blockquote>
+      </article>
+
+      <!-- Dev team -->
+      <article class="person">
+        <figure>
+          <img src="art/tvishaa-lab.jpg" alt="Tvishaa's drawing of the Alchemy Lab cauldron" style="object-position: 50% 62%">
+          <figcaption>The Alchemy Lab, where Leslie's spell is brewed · drawing by Tvishaa</figcaption>
+        </figure>
+        <h3>Leslie</h3>
+        <p class="role"><b>Dev team</b> · Actuarial Science, minors in Statistics and Health Sciences</p>
+        <p class="highlight">Not a CS major, and she grew so much as a coder.</p>
+        <dl class="started">
+          <dt>Where she started</dt>
+          <dd>Some Python and PyGame, and she'd already built an app and a game.</dd>
+        </dl>
+        <p class="built"><b>Built:</b> the Alchemy Lab spell (ending on encapsulation), the name LabyrinthLearn, the mistake counter and the weak-spot scroll.</p>
+        <blockquote class="proud">"I built the ... level using encapsulation and I am proud of learning it"</blockquote>
+      </article>
+
+      <article class="person">
+        <figure>
+          <img src="art/tvishaa-maze.jpg" alt="Tvishaa's drawing of the hedge maze with numbered turns" style="object-position: 50% 45%">
+          <figcaption>LabyrinthLearn, where Sanjana wrote turns 3 to 5 · drawing by Tvishaa</figcaption>
+        </figure>
+        <h3>Sanjana</h3>
+        <p class="role"><b>Dev team</b> · IT</p>
+        <p class="highlight">She laid the groundwork: her early work and OOP research shaped what every chamber teaches.</p>
+        <dl class="started">
+          <dt>Where she started</dt>
+          <dd>C, Java and some Python, and she wanted to build an app or website with AI for the first time.</dd>
+        </dl>
+        <p class="built"><b>Built:</b> the OOP research, LabyrinthLearn turns 3 to 5, the wrong-answer explanations, the maze counter and keys as flashcards.</p>
+        <blockquote class="proud">"I'm proud that my outcome was successful."</blockquote>
+      </article>
+
+      <!-- Project lead -->
+      <article class="person">
+        <figure>
+          <img src="art/tvishaa-door.jpg" alt="Tvishaa's drawing of the wooden castle door where the quest begins" style="object-position: 50% 40%">
+          <figcaption>The castle door, where the quest starts · drawing by Tvishaa</figcaption>
+        </figure>
+        <h3>Katrina</h3>
+        <p class="role"><b>Project lead</b> · Computer Science / Robotics</p>
+        <p class="highlight">Our project lead and mentor. She kept the quest on track from kickoff to showcase.</p>
+        <dl class="started">
+          <dt>Where she started</dt>
+          <dd>Into AI, web dev, ML, project management, embedded hardware and business proposals, and wanted to build a hardware/software solution.</dd>
+        </dl>
+        <p class="built"><b>Built:</b> the starter code, the task guides and code reviews.</p>
+        <blockquote class="proud">"I'm so thankful for this team."</blockquote>
+      </article>
+    </div>
+
+    <!-- ---------- The story ---------- -->
+    <h2>The story</h2>
+    <ol class="timeline">
+      <li><b>Oct 4 · Brainstorm</b>Real problems we'd run into as UCF students: a study tool, a professor finder, campus transportation, project matching.</li>
+      <li><b>Lots of polls</b>The study tool won. More polls and research narrowed it to OOP, taught through a game.</li>
+      <li><b>Tvishaa joins</b>Simone, the president of Girls Who Code at UCF, added Tvishaa. Our theme poll tied, and her vote made it an escape room.</li>
+      <li><b>The blueprint</b>Tvishaa mapped the whole game in Figma, then drew it. Her drawings brought our ideas to life.</li>
+      <li><b>Oct 24 · First Council</b>We voted: keys become flashcards, a weak-spot scroll, hints that explain, a sly trickster warlock. Leslie named LabyrinthLearn.</li>
+      <li><b>Nov 14 · Final meeting</b>We chose Tvishaa's drawings for the look and named it Knight's Escape: An OOP Quest.</li>
+    </ol>
+    <p class="growth">Along the way, our comfort with classes and objects went from <b>2.5</b> to <b>3.7</b> out of 5 (team average from our check-ins), and everyone who checked in more than once ended higher than she started.</p>
+
+    <!-- ---------- From sketch to game ---------- -->
+    <h2>From sketch to game</h2>
+    <div class="gallery">
+      <figure>
+        <a href="docs/img/tvishaa-sketches.jpg" target="_blank" rel="noopener">
+          <img src="docs/img/tvishaa-sketches.jpg" alt="Tvishaa's red pencil planning sketches: the Maze door, the warlock's staff, an ornate question box, the Chamber 1 maze layout, the Alchemy Lab, the Hall of Illusions with a code display on each door, the warlock at the Final Door, and a torch-lit tunnel">
+        </a>
+        <figcaption><b>The sketches.</b> Every screen planned on paper first · by Tvishaa</figcaption>
+      </figure>
+      <figure>
+        <a href="art/tvishaa-roadmap.png" target="_blank" rel="noopener">
+          <img src="art/tvishaa-roadmap.png" alt="Tvishaa's Figma flowchart: choose your knight, get dropped into a dark dungeon by the warlock, then Chamber 1 the maze, Chamber 2 the alchemy lab, Chamber 3 the hall of illusions, Chamber 4 the final door, then free with the option to play again">
+        </a>
+        <figcaption><b>The blueprint.</b> Her design roadmap, made in Figma. Every chamber follows it · by Tvishaa</figcaption>
+      </figure>
+    </div>
+    <p class="gallery-note">Tap a picture to see it full size.</p>
+
+    <div class="gwc">
+      <img src="art/gwc-ucf-logo.jpg" alt="Girls Who Code UCF logo">
+      <p>Knight's Escape is Project 9 with <b>Girls Who Code at UCF</b>.<span>Logo: Girls Who Code UCF</span></p>
+    </div>
+
+    <button id="about-play" class="about-play" onclick="showGame()">Play Knight's Escape</button>
+  </section>
+
   <footer><span>Chamber drawings by Tvishaa · Made by Group 9: Leslie, Sanjana, Shirley and Tvishaa</span></footer>
   <script src="rooms.js"></script>
   <script src="scenes.js"></script>
   <script src="game.js"></script>
+  <script src="about.js"></script>
 </body>
 </html>

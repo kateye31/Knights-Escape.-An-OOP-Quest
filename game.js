@@ -242,11 +242,13 @@ function escapeScreen() {
   else if (weakSpot === LAB.title) weakSpotConcept = LAB.concept;
   else if (weakSpot === HALL.title) weakSpotConcept = HALL.concept;
 
+  player.escaped = true; // the About page's Play button starts a fresh game after this
   show(`<h1>You escaped!</h1>
         <p class="warlock">${WARLOCK.name}: "${WARLOCK.defeated}"</p>
         <p>${player.knight.name} · ${player.difficulty.name} · Keys: ${player.keys} of ${FINAL.questions.length} · Mistakes: ${player.mistakes}</p>
         ${player.mistakes > 0 ? `<p class="weak-spot">Review ${weakSpot}: ${weakSpotConcept}</p>` : ""}
-        <button onclick="startScreen()">Play again</button>`, "door");
+        <button onclick="startScreen()">Play again</button>
+        <button class="secondary" onclick="showAbout()">Meet the creators</button>`, "door");
 }
 
 startScreen();
