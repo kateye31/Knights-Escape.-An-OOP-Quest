@@ -165,6 +165,8 @@ function brew(good, word) {
   pot.classList.remove("good", "bad");
   void pot.offsetWidth; // restart the animation
   pot.classList.add(good ? "good" : "bad");
+  // make sure you can see the cauldron when it reacts
+  pot.closest(".stage").scrollIntoView({ block: "nearest", behavior: calm() ? "auto" : "smooth" });
   if (calm()) return;
   for (let i = 0; i < (good ? 10 : 7); i++) {
     const b = document.createElement("span");
@@ -183,16 +185,22 @@ function brew(good, word) {
 }
 
 // ---------- Chamber 3: the code sits on her doors ----------
-// Each door's display box, over the flat part of the door she drew
-const HALL_DOORS = [{ left: 8 }, { left: 40 }, { left: 72.5 }];
+// Her three doors: the whole drawn door (for the illusion shade), and the
+// "display code" box inside it, clear of the door knob (like her sketch)
+const HALL_DOORS = [
+  { door: [5, 29.5], display: 9 },
+  { door: [37, 62], display: 41 },
+  { door: [69, 94], display: 73.5 },
+];
 
 // marks: for each door, "" or "illusion" (wrong, fades) or "real" (the right one)
 function hallStage(n, marks = ["", "", ""], clickable = true) {
   const r = HALL.rounds[n];
+  const shades = HALL_DOORS.map((d, i) =>
+    `<span class="door-shade door-${i + 1} ${marks[i]}" style="left:${d.door[0]}%;width:${d.door[1] - d.door[0]}%"></span>`).join("");
   const onDoors = r.doors.map((code, i) => `
-      <button class="hall-door door-${i + 1} ${marks[i]}" style="left:${HALL_DOORS[i].left}%"
+      <button class="hall-door door-${i + 1} ${marks[i]}" style="left:${HALL_DOORS[i].display}%"
               ${clickable ? `onclick="hallAnswer(${n}, ${i})"` : "disabled"} aria-label="Door ${i + 1}">
-        <span class="door-shade"></span>
         <span class="door-display"><b>Door ${i + 1}</b>${codeBlock(code)}</span>
       </button>`).join("");
   // On small screens the code is too small to read on the doors, so it also shows below
@@ -200,7 +208,7 @@ function hallStage(n, marks = ["", "", ""], clickable = true) {
       <button class="door door-${i + 1} ${marks[i]}" ${clickable ? `onclick="hallAnswer(${n}, ${i})"` : "disabled"}>
         <b>Door ${i + 1}</b>${codeBlock(code)}
       </button>`).join("");
-  return `<div class="hall">${stage("hall", onDoors, "stage-hall")}<div class="doors">${below}</div></div>`;
+  return `<div class="hall">${stage("hall", shades + onDoors, "stage-hall")}<div class="doors">${below}</div></div>`;
 }
 
 function markDoor(i, mark) {

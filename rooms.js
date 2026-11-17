@@ -31,6 +31,8 @@ const MAZE = {
   title: "LabyrinthLearn",
   concept: "Classes and objects",
   story: "Stone walls twist in every direction. Choose the right path at each turn.",
+  // Shown under the maze drawing on every turn: the arrows are a trick, the code is the answer
+  warning: "Careful, little knight: I bewitched these arrows. They don't match the map, so don't trust the picture. Read the code to find your way.",
   turns: [
     {
       code: "class Knight {\n    String name;\n}\n\nKnight k = new Knight();",

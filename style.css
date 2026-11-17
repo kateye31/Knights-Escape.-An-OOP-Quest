@@ -255,6 +255,8 @@ footer span { display: inline-block; background: rgba(11, 8, 6, 0.75); padding: 
 }
 .stage > img { display: block; width: 100%; height: auto; }
 .stage-hall { width: 100%; }
+.stage-maze { --fit: 40vh; }
+.stage-lab { --fit: 34vh; }
 
 /* Her question box / storyline frame, with her door-knob spiral on each side */
 .scroll-box {
@@ -287,6 +289,8 @@ footer span { display: inline-block; background: rgba(11, 8, 6, 0.75); padding: 
 
 /* Maze: Sanjana's counter hangs on the wooden frame, the knight walks her path */
 .stage .maze-board { position: absolute; top: 2.5%; left: 2%; margin: 0; font-size: 15px; }
+.maze-warning { margin: -6px 0 10px; text-align: center; font-size: 16px; font-style: italic; color: var(--warlock); }
+.maze-warning b { font-style: normal; }
 .maze-layer { position: absolute; inset: 0; width: 100%; height: 100%; }
 #trail {
   fill: none;
@@ -334,10 +338,12 @@ footer span { display: inline-block; background: rgba(11, 8, 6, 0.75); padding: 
   left: 50%;
   bottom: 60%;
   font-family: var(--font-title);
-  font-size: 3.4cqw;
+  font-size: 4.4cqw;
   color: var(--torch);
   white-space: nowrap;
-  text-shadow: 0 2px 0 var(--ink), 0 0 6px var(--ink);
+  -webkit-text-stroke: 0.45cqw var(--ink);
+  paint-order: stroke fill;
+  text-shadow: 0 0.4cqw 0 var(--ink);
   opacity: 0;
   animation: word-rise 1.3s var(--ease-out) 150ms forwards;
 }
@@ -352,9 +358,8 @@ footer span { display: inline-block; background: rgba(11, 8, 6, 0.75); padding: 
 .hall { container: hall / inline-size; }
 .hall-door {
   position: absolute;
-  top: 42%;
-  width: 19.5%;
-  height: 34.5%;
+  top: 44%;
+  width: 16.5%;
   margin: 0;
   padding: 0;
   border: 0;
@@ -367,11 +372,10 @@ footer span { display: inline-block; background: rgba(11, 8, 6, 0.75); padding: 
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.5cqw;
-  height: 100%;
+  gap: 0.4cqw;
   box-sizing: border-box;
-  padding: 0.9cqw;
-  background: rgba(11, 8, 6, 0.86);
+  padding: 0.8cqw 0.9cqw 1cqw;
+  background: rgba(11, 8, 6, 0.88);
   border: 0.3cqw solid var(--door-color);
   border-radius: 0.9cqw;
   color: var(--text);
@@ -399,16 +403,15 @@ footer span { display: inline-block; background: rgba(11, 8, 6, 0.75); padding: 
 /* A wrong door: the illusion fades into the wall */
 .door-shade {
   position: absolute;
-  left: -4%;
-  right: -4%;
-  top: -62%;
-  bottom: 0;
-  border-radius: 50% 50% 4% 4% / 36% 36% 4% 4%;
+  top: 17%;
+  height: 62%;
+  border-radius: 50% 50% 2% 2% / 42% 42% 2% 2%;
+  pointer-events: none;
   background: rgba(13, 9, 5, 0.78);
   opacity: 0;
   transition: opacity 0.6s var(--ease-out);
 }
-.hall-door.illusion .door-shade { opacity: 1; }
+.door-shade.illusion { opacity: 1; }
 .hall-door.illusion .door-display { opacity: 0.25; }
 .hall-door.real .door-display { box-shadow: 0 0 0 0.4cqw var(--torch); }
 .hall-door:disabled { cursor: default; }

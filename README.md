@@ -15,18 +15,41 @@ Knight's Escape is a browser escape room that teaches Java object-oriented progr
   <img src="https://img.shields.io/badge/Art-hand--drawn-37260A?style=for-the-badge" alt="Hand-drawn art">
 </p>
 
-![The Hall of Illusions: three arched code doors in green, purple and teal, in front of Tvishaa's drawing of the same three doors](docs/img/hall.jpg)
+![The Hall of Illusions: the Java code for each choice sits on Tvishaa's three drawn doors in green, purple and teal, under a framed question](docs/img/hall.jpg)
 
 ### Every chamber opens on Tvishaa's drawing
 
-When you walk into a new chamber, her full drawing shows first, uncropped, with the chamber's name. Then it fades into the puzzle, and the drawing stays behind you while you play. Click or press any key to skip ahead.
+When you walk into a new chamber, her full drawing shows first, uncropped, with the chamber number and name ("Chamber 1 · LabyrinthLearn"). It waits for you: click **Enter**, click anywhere, or press any key to step inside. Chamber 1 opens on her castle door, since that's the way into the maze.
+
+### Her drawings come alive
+
+The puzzles now happen *on* her drawings instead of just in front of them:
+
+| Chamber | What happens on the drawing |
+| --- | --- |
+| 🌿 **LabyrinthLearn** | Your knight is a dot in your knight's color, standing at her **Start** arrow. Each right answer walks it down the corridor to her next hand-drawn number (1 → 5, then **End**), leaving a trail. A wrong turn bumps it into the wall that way. The answer buttons use **her drawn arrows** instead of emoji. The arrows are a trick, though: they don't match the map, and the warlock warns you under the drawing to trust the code, not the picture. |
+| ⚗️ **The Alchemy Lab** | Her cauldron reacts. A right answer sends up green bubbles and the spell word rises out of the brew. A wrong one turns it murky. |
+| 🚪 **The Hall of Illusions** | Each door's code sits **on her drawn door**. Pick a wrong one and that door fades into the wall (it was an illusion); the real one glows. On phones the code is too small to read on the doors, so it also shows underneath. |
+| 🗝️ **The Final Door** | Her warlock stands guard with **three keyholes** that fill in as you earn each key. |
+
+The warlock's speeches sit in a question box framed with the spiral from her door knob.
 
 <table>
   <tr>
-    <td width="50%"><img src="docs/img/card-maze.jpg" alt="Title card: Tvishaa's full hand-drawn hedge maze with Start and End arrows, captioned LabyrinthLearn"></td>
-    <td width="50%"><img src="docs/img/card-lab.jpg" alt="Title card: Tvishaa's full drawing of the alchemy lab with a bubbling green cauldron, captioned The Alchemy Lab"></td>
+    <td width="50%"><img src="docs/img/card-maze.jpg" alt="Title card: Tvishaa's drawing of the wooden Maze door, captioned Chamber 1, LabyrinthLearn, with an Enter button"></td>
+    <td width="50%"><img src="docs/img/card-final.jpg" alt="Title card: Tvishaa's drawing of the hooded warlock holding a torch staff and a gold key in front of the final door, captioned Chamber 4, The Final Door"></td>
+  </tr>
+  <tr>
+    <td><b>Chamber 1</b> opens on her Maze door.</td>
+    <td><b>Chamber 4:</b> the warlock guards the Final Door.</td>
   </tr>
 </table>
+
+### From her sketches to the game
+
+Tvishaa planned every screen on paper first: the Maze door, the maze layout with the question box under it, the code displays on the Hall doors, the warlock guarding the Final Door, and the curly question-box frame. The game follows those sketches.
+
+![Tvishaa's planning sketches in red pencil: the Maze door, the warlock's staff, an ornate question box, the Chamber 1 maze layout with a question box and left/right buttons, the Alchemy Lab, the Hall of Illusions with a code display on each door, the warlock at the Final Door, and a torch-lit tunnel for the opening screen](docs/img/tvishaa-sketches.jpg)
 
 ## Play it
 
@@ -49,31 +72,39 @@ Difficulty sets your hints per chamber: **Squire** 3, **Knight** 2, **Champion**
 <table>
   <tr>
     <td width="50%"><img src="docs/img/start.jpg" alt="Title screen: Knight's Escape, An OOP Quest, with three knight buttons, over a drawing of a wooden castle door"></td>
-    <td width="50%"><img src="docs/img/intro.jpg" alt="The warlock's welcome speech over Tvishaa's drawing of the hooded warlock holding a torch staff and a gold key"></td>
+    <td width="50%"><img src="docs/img/intro.jpg" alt="The warlock's welcome speech inside a gold question box with a hand-drawn spiral on each side"></td>
   </tr>
   <tr>
-    <td><b>Choose your knight.</b> The castle door is where it starts and ends.</td>
-    <td><b>The warlock.</b> He holds the key you're after.</td>
+    <td><b>Choose your knight.</b></td>
+    <td><b>The warlock's welcome,</b> in her question-box frame.</td>
   </tr>
   <tr>
-    <td><img src="docs/img/maze.jpg" alt="LabyrinthLearn turn 1: a Java Knight class, the question 'Which one is the OBJECT?', a hint, and the warlock explaining why the wrong answer was wrong, over a hand-drawn hedge maze"></td>
-    <td><img src="docs/img/lab.jpg" alt="Alchemy Lab step 3: the spell so far reads 'Squire doing', with a code snippet and three answer choices, over a drawing of a bubbling green cauldron"></td>
+    <td><img src="docs/img/maze.jpg" alt="LabyrinthLearn turn 1: the knight's dot at Tvishaa's number 1 with a dashed trail from Start, a code question in the framed box, answer buttons with hand-drawn arrows, a hint, and the warlock explaining the wrong answer"></td>
+    <td><img src="docs/img/maze-end.jpg" alt="LabyrinthLearn after turn 5: the dashed trail runs through all five numbers to End"></td>
   </tr>
   <tr>
-    <td><b>LabyrinthLearn.</b> A wrong turn tells you exactly what you mixed up.</td>
-    <td><b>The Alchemy Lab.</b> Four right answers spell <i>"Squire doing king's work."</i></td>
+    <td><b>LabyrinthLearn.</b> Her drawn arrows on the buttons. A wrong turn tells you exactly what you mixed up.</td>
+    <td><b>Turn 5 right:</b> the knight reaches her End.</td>
   </tr>
   <tr>
-    <td><img src="docs/img/key.jpg" alt="Key earned: a gold-bordered flashcard reading 'A class is a blueprint. An object is one thing built from that blueprint.'"></td>
+    <td><img src="docs/img/lab.jpg" alt="Alchemy Lab: green bubbles rise from the cauldron and the word SQUIRE floats up out of the brew"></td>
+    <td><img src="docs/img/hall-wrong.jpg" alt="Hall of Illusions: code on each drawn door; the teal door has faded dark after a wrong pick"></td>
+  </tr>
+  <tr>
+    <td><b>The Alchemy Lab.</b> Right answers bubble green. Four of them spell <i>"Squire doing king's work."</i></td>
+    <td><b>The Hall of Illusions.</b> A wrong door fades into the wall.</td>
+  </tr>
+  <tr>
+    <td><img src="docs/img/key.jpg" alt="Key earned: three gold keyholes in front of the warlock, and a flashcard reading 'The same method call can do different things depending on the real object.'"></td>
     <td><img src="docs/img/escape.jpg" alt="You escaped: the warlock's defeated line, keys 3 of 3, mistakes 3, and a parchment scroll saying Review LabyrinthLearn: Classes and objects"></td>
   </tr>
   <tr>
-    <td><b>Key flashcards.</b> Every key you earn is something to remember.</td>
+    <td><b>Key flashcards.</b> Each key fills a keyhole and gives you something to remember.</td>
     <td><b>Escape.</b> The scroll tells you which chamber to review.</td>
   </tr>
 </table>
 
-<p align="center"><img src="docs/img/phone.jpg" width="560" alt="The game on two phone screens: the opening title card with the castle door, and the Hall of Illusions doors stacked"><br><b>Works on phones too.</b></p>
+<p align="center"><img src="docs/img/phone.jpg" width="560" alt="The game on three phone screens: the Chamber 1 title card with the Maze door, the maze with the knight at number 1 and drawn-arrow buttons, and the Hall doors with the code listed underneath"><br><b>Works on phones too.</b></p>
 
 ## Who made what
 
@@ -81,7 +112,7 @@ We're Group 9 (Girls Who Code, Project 9): four students and a mentor.
 
 | | What she built |
 | --- | --- |
-| **Tvishaa** · Design | The game design (the Group 9 design roadmap: a warlock, four chambers) and **every drawing in the game**: the castle door, the warlock, the maze, the alchemy lab and the three doors. The game's colors come from her art. |
+| **Tvishaa** · Design | The game design (the Group 9 design roadmap: a warlock, four chambers), **every drawing in the game** (the Maze door, the maze, the alchemy lab, the three doors and the warlock), and the **planning sketches** that set where everything goes on screen. The game's colors come from her art. |
 | **Shirley** · Design | The **page animations**: buttons lift when you point at them. She also designed the light fall look we compared against at the final meeting. |
 | **Sanjana** · Build + content | The **OOP research** the chambers follow. LabyrinthLearn turns 3–5 (constructors, references, methods), **wrong-answer explanations**, the maze counter, and **keys as flashcards**. |
 | **Leslie** · Build + content | The **Alchemy Lab spell** (*"Squire doing king's work,"* ending on encapsulation), renaming the maze to LabyrinthLearn, the **mistake counter**, and the **weak-spot scroll** on the escape screen. |
@@ -91,20 +122,21 @@ The team picked the name, the colors and the look together in Council votes on o
 
 ## Design
 
-- **Art:** all five scenes are Tvishaa's own drawings (in [`art/`](art/)). Each chamber opens on a title card with her full drawing, then the drawing sits behind the chamber while you play. The files are cleanly upscaled 2× so they stay sharp on big screens.
+- **Art:** all five scenes are Tvishaa's own drawings (in [`art/`](art/)). Each chamber opens on a title card with her full drawing, then the puzzle plays out on top of it. The maze arrows and the door-knob spiral are cut from her drawings too. The files are cleanly upscaled 2× so they stay sharp on big screens, and they always keep their own shape (never stretched).
 - **Colors:** pulled straight from her drawings: brick and wood browns, maze-coin gold, hedge green, and the green, purple and teal of her three Hall doors, which the code doors match.
 - **Fonts:** Microsoft fonts that come with Windows and Office. **Castellar** (carved capitals) for big titles, **Constantia** for reading, **Cascadia Mono** / Consolas for code.
-- **Motion:** Shirley's hover lift on every button, and a quiet crossfade from each title card into its chamber (opacity and a 10px slide, no bounce or zoom). Both turn off for anyone whose computer asks for reduced motion.
+- **Motion:** Shirley's hover lift on every button, a quiet crossfade from each title card into its chamber, the knight walking the maze, the cauldron bubbling and the Hall doors fading. All of it turns off for anyone whose computer asks for reduced motion (the knight just appears at its next stop).
 
 ## How the code works
 
 | File | What's in it |
 | --- | --- |
 | [`rooms.js`](rooms.js) | All the content: story, Java snippets, questions, hints, wrong-answer explanations. Edit this to change a puzzle. |
-| [`game.js`](game.js) | How the screens work: one function per screen, plus hints, taunts, keys and the escape screen. |
-| [`style.css`](style.css) | Colors (the `:root` block at the top), fonts, layout, the chamber backgrounds, and Shirley's animations. |
-| [`index.html`](index.html) | The page itself. Loads the three files above. |
-| [`art/`](art/) | Tvishaa's drawings. |
+| [`scenes.js`](scenes.js) | Tvishaa's drawings and what happens on them: the title cards, the knight's route through her maze, the cauldron, the code on the Hall doors and the warlock's keyholes. |
+| [`game.js`](game.js) | How the screens work: one function per screen, plus hints, taunts, keys and the escape screen. It calls the helpers in `scenes.js`. |
+| [`style.css`](style.css) | Colors (the `:root` block at the top), fonts, layout, the chamber backgrounds, the scene effects, and Shirley's animations. |
+| [`index.html`](index.html) | The page itself, plus the title card. Loads `rooms.js`, `scenes.js` and `game.js`, in that order. |
+| [`art/`](art/) | Tvishaa's drawings (`tvishaa-*.jpg`), plus the arrows and spiral cut from them. |
 | [`docs/`](docs/) | The [team guide](docs/TEAM-GUIDE.md) (setup, git, how to write a puzzle), the [welcome page](docs/WELCOME.md) and README screenshots. |
 
 Every puzzle is plain data, so adding one means copying a block in `rooms.js`:
@@ -121,7 +153,21 @@ Every puzzle is plain data, so adding one means copying a block in `rooms.js`:
 },
 ```
 
-To pick which drawing sits behind a screen, `game.js` passes a scene name and a title to `show()`, like `show(html, "maze", MAZE.title)`. The first time a scene appears, `showSceneCard()` shows `art/tvishaa-maze.jpg` full size with that title, then fades into the chamber.
+To pick which drawing sits behind a screen, `game.js` passes a scene name to `show()`, like `show(html, "maze")`. When you first walk into a chamber, it calls `titleCard("lab", "Chamber 2", LAB.title)` from `scenes.js`, which shows `art/tvishaa-lab.jpg` full size until you click Enter.
+
+Things placed on a drawing (the knight, the cauldron bubbles, the door code) use **percentages of the picture**: `[0, 0]` is the top-left corner and `[100, 100]` the bottom-right. So if the knight walks through a hedge, fix its corner in `MAZE_ROUTE` at the top of the maze section in `scenes.js`:
+
+```js
+const MAZE_ROUTE = [
+  [[9, 72.5]],               // Start (her arrow)
+  [[35.5, 72.5]],            // 1
+  [[35.5, 43.5]],            // 2
+  [[25, 43.5], [25, 36]],    // 3 (two corners to get there)
+  ...
+];
+```
+
+The Hall doors work the same way in `HALL_DOORS`, and the cauldron's spot is `CAULDRON`.
 
 ## Contributing
 

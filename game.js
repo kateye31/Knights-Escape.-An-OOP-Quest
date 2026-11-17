@@ -88,6 +88,7 @@ function mazeTurn(n) {
   const board = `<p class="maze-board">Maze ${mazeNumber} of ${MAZE.turns.length}</p>`;
   show(`${header(MAZE, mazeNumber, MAZE.turns.length)}
         ${mazeStage(n === 0 ? 0 : mazeNumber, board)}
+        <p class="maze-warning"><b>${WARLOCK.name}:</b> ${MAZE.warning}</p>
         ${n === 0 ? `<p class="story">${MAZE.story}</p>` : ""}
         <div class="scroll-box">${codeBlock(t.code)}<h2>${t.question}</h2></div>
         <div class="choices">${choices}</div>
